@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import Box from '@mui/material/Box';
 
 interface FormValues {
   name: string;
@@ -15,7 +16,7 @@ interface FormValues {
   sex: string;
   mobile: string;
   govtIdType: string;
-  govtId?: string | undefined;
+  govtId?: string ;
 }
 
 const Step1FormSchema = yup.object({
@@ -31,12 +32,15 @@ const Step1FormSchema = yup.object({
       const govtIdType = context.parent.govtIdType;
       if (govtIdType === 'Aadhar') {
         return !!value && /^[2-9]\d{11}$/.test(value);
+      } else if (govtIdType === 'PAN') {
+        
+        return !!value && /[A-Z]{5}[0-9]{4}[A-Z]{1}/.test(value.toUpperCase());
       }
-      // For other types, no validation needed
       return true;
     },
   }),
 });
+
 
 const resolver = yupResolver<FormValues>(Step1FormSchema);
 
@@ -55,55 +59,116 @@ const Step1Form: React.FC<Step1FormProps> = ({ onSubmit }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Controller
-        name="name"
-        control={control}
-        render={({ field }) => (
-          <TextField label="Name" variant="outlined" fullWidth {...field} error={!!errors.name} helperText={errors.name?.message} />
-        )}
-      />
-      <Controller
-        name="age"
-        control={control}
-        render={({ field }) => (
-          <TextField label="Age" variant="outlined" fullWidth type="number" {...field} error={!!errors.age} helperText={errors.age?.message} />
-        )}
-      />
-      <Controller
-        name="sex"
-        control={control}
-        render={({ field }) => (
-          <TextField label="Sex" variant="outlined" fullWidth {...field} error={!!errors.sex} helperText={errors.sex?.message} />
-        )}
-      />
-      <Controller
-        name="mobile"
-        control={control}
-        render={({ field }) => (
-          <TextField label="Mobile" variant="outlined" fullWidth {...field} error={!!errors.mobile} helperText={errors.mobile?.message} />
-        )}
-      />
-      <Controller
-        name="govtIdType"
-        control={control}
-        render={({ field }) => (
-          <Select label="Govt ID Type" variant="outlined" fullWidth {...field} error={!!errors.govtIdType} >
-            <div>{errors.govtIdType?.message}</div>
-            <MenuItem value="Aadhar">Aadhar</MenuItem>
-            <MenuItem value="PAN">PAN</MenuItem>
-          </Select>
-        )}
-      />
-      <Controller
-        name="govtId"
-        control={control}
-        render={({ field }) => (
-          <TextField label="Govt ID" variant="outlined" fullWidth {...field} error={!!errors.govtId} helperText={errors.govtId?.message} />
-        )}
-      />
-      <Button type="submit" variant="contained" color="primary">
-        Next
-      </Button>
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        width={400}
+        mx="auto"
+        mt={3}
+        p={3}
+        boxShadow={3}
+        borderRadius={8}
+        bgcolor="white"
+      >
+        <Controller
+          name="name"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              label="Name"
+              variant="outlined"
+              fullWidth
+              {...field}
+              error={!!errors.name}
+              helperText={errors.name?.message}
+              style={{ marginBottom: '2px' }}
+            />
+          )}
+        />
+        <Controller
+          name="age"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              label="Age"
+              variant="outlined"
+              fullWidth
+              type="number"
+              {...field}
+              error={!!errors.age}
+              helperText={errors.age?.message}
+              style={{ marginBottom: '2px' }}
+            />
+          )}
+        />
+        <Controller
+          name="sex"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              label="Sex"
+              variant="outlined"
+              fullWidth
+              {...field}
+              error={!!errors.sex}
+              helperText={errors.sex?.message}
+              style={{ marginBottom: '2px' }}
+            />
+          )}
+        />
+        <Controller
+          name="mobile"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              label="Mobile"
+              variant="outlined"
+              fullWidth
+              {...field}
+              error={!!errors.mobile}
+              helperText={errors.mobile?.message}
+              style={{ marginBottom: '2px' }}
+            />
+          )}
+        />
+        <Controller
+          name="govtIdType"
+          control={control}
+          render={({ field }) => (
+            <Select
+              label="Govt ID Type"
+              variant="outlined"
+              fullWidth
+              {...field}
+              value={field.value || ''}
+              error={!!errors.govtIdType}
+              style={{ marginBottom: '2px' }}
+            >
+              <MenuItem value="Aadhar">Aadhar</MenuItem>
+              <MenuItem value="PAN">PAN</MenuItem>
+            </Select>
+          )}
+        />
+        <Controller
+          name="govtId"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              label="Govt ID"
+              variant="outlined"
+              fullWidth
+              {...field}
+              error={!!errors.govtId}
+              helperText={errors.govtId?.message}
+              style={{ marginBottom: '2px' }}
+            />
+          )}
+        />
+        <Button type="submit" variant="contained" color="primary">
+          Next
+        </Button>
+      </Box>
     </form>
   );
 };

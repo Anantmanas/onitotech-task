@@ -1,42 +1,38 @@
 import React from 'react';
-import 'datatables.net';
+import DataTable, { TableColumn } from 'react-data-table-component';
 import { User } from "./Redux/userSlice"
-import $ from 'jquery'
+
 interface DatatableListProps {
-  users: User[]; // Assuming User interface is defined in userSlice.ts
+  users: User[];
 }
 
-class DatatableList extends React.Component<DatatableListProps> {
-  tableRef = React.createRef<HTMLTableElement>();
+const DatatableList: React.FC<DatatableListProps> = ({ users }) => {
+  const columns: TableColumn<User>[] = [
+    { name: 'ID', selector: (row: User) => row.id }, 
+    { name: 'Name', selector: (row: User) => row.name },
+    { name: 'Age', selector: (row: User) => row.age },
+    { name: 'Sex', selector: (row: User) => row.sex },
+    { name: 'Mobile', selector: (row: User) => row.mobile },
+    { name: 'govtIdType', selector: (row: User) => row.govtIdType },
+    { name: 'govtId', selector: (row: User) => row.govtId },
+    { name: 'address', selector: (row: User) => row.address },
+    { name: 'state', selector: (row: User) => row.state },
+    { name: 'city', selector: (row: User) => row.city },
+    { name: 'country', selector: (row: User) => row.selectedCountry },
+    { name: 'pincode', selector: (row: User) => row.pincode },
 
-  componentDidMount() {
-    this.initDataTable();
-  }
+  ];
+  
+  const data = users.map((user, index) => ({ ...user, id: index + 1 }));
 
-  componentDidUpdate() {
-    this.initDataTable();
-  }
-
-  initDataTable() {
-    if (this.tableRef.current) {
-      $(this.tableRef.current).DataTable().destroy();
-      $(this.tableRef.current).DataTable({
-        data: this.props.users,
-        columns: [
-          { title: 'ID', data: 'id' },
-          { title: 'Name', data: 'name' },
-          { title: 'Age', data: 'age' },
-          { title: 'Sex', data: 'sex' },
-          { title: 'Mobile', data: 'mobile' },
-          // ... (Repeat for other columns)
-        ],
-      });
-    }
-  }
-
-  render() {
-    return <table ref={this.tableRef} />;
-  }
-}
+  return (
+    <DataTable
+      title="User Data"
+      columns={columns}
+      data={data}
+      pagination
+    />
+  );
+};
 
 export default DatatableList;

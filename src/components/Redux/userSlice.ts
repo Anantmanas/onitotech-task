@@ -8,11 +8,12 @@ export interface User {
   mobile: string;
   govtIdType: string;
   govtId: string;
-  address?: string;
-  state?: string;
-  city?: string;
-  country?: string;
-  pincode?: number;
+  address: string;
+  state: string;
+  city: string;
+  country: string;
+  pincode: number;
+  selectedCountry :string
 }
 
 interface UserState {
