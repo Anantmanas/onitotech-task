@@ -37,6 +37,13 @@
   padding: 2em;
 }
 
+.app{
+  font-weight: 700;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+}
+
+
 .read-the-docs {
   color: #888;
 }

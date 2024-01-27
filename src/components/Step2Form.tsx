@@ -1,33 +1,25 @@
 // Step2Form.tsx
 
-import React,{useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { TextField, Button,  Box,Autocomplete } from '@mui/material';
+import { TextField, Button, Box, Autocomplete } from '@mui/material';
 
 interface FormValues {
-  address: string;
-  state: string;
-  city: string;
-  country: string;
-  pincode: number;
+  address?: string;
+  state?: string;
+  city?: string;
+  country?: string;
+  pincode?: number;
 }
 const Step2FormSchema = yup.object({
-  address: yup.string().required(),
-  state: yup.string().required(),
-  city: yup.string().required(),
-  country: yup.string().test({
-    name: 'country',
-    message: 'Country is required',
-    test: function (value, context) {
-      const country = context.parent.country;
-      return country !== null && country !== undefined && country.length > 0;
-    },
-  }).required(),
-  pincode: yup.number().positive().integer().required(),
+  address: yup.string(),
+  state: yup.string(),
+  city: yup.string(),
+  country: yup.string(),
+  pincode: yup.number().positive().integer(),
 });
-
 
 
 const resolver = yupResolver<FormValues>(Step2FormSchema);
@@ -47,22 +39,22 @@ const Step2Form: React.FC<Step2FormProps> = ({ onSubmit }) => {
 
 
 
-  
-useEffect(() => {
-  // Fetch country options from the API
-  const fetchCountryOptions = async () => {
-    try {
-      const response = await fetch('https://restcountries.com/v3.1/all');
-      const data = await response.json();
-      const countryNames = data.map((country: any) => country.name.common);
-      setCountryOptions(countryNames);
-    } catch (error) {
-      console.error('Error fetching country options:', error);
-    }
-  };
 
-  fetchCountryOptions();
-}, []);
+  useEffect(() => {
+    // Fetch country options from the API
+    const fetchCountryOptions = async () => {
+      try {
+        const response = await fetch('https://restcountries.com/v3.1/all');
+        const data = await response.json();
+        const countryNames = data.map((country: any) => country.name.common);
+        setCountryOptions(countryNames);
+      } catch (error) {
+        console.error('Error fetching country options:', error);
+      }
+    };
+
+    fetchCountryOptions();
+  }, []);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -127,21 +119,21 @@ useEffect(() => {
           )}
         />
 
-<Controller
-        name="country"
-        control={control}
-        render={({ field }) => (
-          <Autocomplete
-          fullWidth
-            {...field}
-            options={countryOptions}
-            renderInput={(params) => (
-              <TextField label="Country" variant="outlined"  {...params}  error={!!errors.country} helperText={errors.country?.message} />
-            )}
-            style={{ marginBottom: '8px' }}
-          />
-        )}
-      />
+        <Controller
+          name="country"
+          control={control}
+          render={({ field }) => (
+            <Autocomplete
+              fullWidth
+              {...field}
+              options={countryOptions}
+              renderInput={(params) => (
+                <TextField label="Country" variant="outlined"  {...params} error={!!errors.country} helperText={errors.country?.message} />
+              )}
+              style={{ marginBottom: '8px' }}
+            />
+          )}
+        />
         <Controller
           name="pincode"
           control={control}
@@ -158,7 +150,7 @@ useEffect(() => {
           )}
         />
 
-        <Button type="submit" variant="contained" color="primary">
+        <Button type="submit" variant="contained" color="secondary">
           Submit
         </Button>
       </Box>

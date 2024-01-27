@@ -6,7 +6,7 @@ import Step2Form from './components/Step2Form';
 import DatatableList from './components/BasicTable';
 import { RootState } from './components/Redux/rootReducer';
 import { Box } from '@mui/material';
-
+import './App.css'
 const App: React.FC = () => {
   const dispatch = useDispatch();
   const users = useSelector((state: RootState) => state.user.users);
@@ -33,26 +33,28 @@ const App: React.FC = () => {
   return (
     <>
       <div >
-        {step === 1 ? (
-          <Step1Form onSubmit={handleStep1Submit} />
-        ) : (
-          <Step2Form onSubmit={handleStep2Submit} />
-        )}
+        <div className=''>
+          {step === 1 ? (
+            <Step1Form onSubmit={handleStep1Submit} />
+          ) : (
+            <Step2Form onSubmit={handleStep2Submit} />
+          )}
+        </div>
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          mx="auto"
+          mt={3}
+          p={3}
+          boxShadow={3}
+          borderRadius={8}
+          bgcolor="white"
+          width="auto"
+        >
+          <DatatableList users={users} />
+        </Box>
       </div>
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-      
-        mx="auto"
-        mt={3}
-        p={3}
-        boxShadow={3}
-        borderRadius={8}
-        bgcolor="white"
-      >
-      <DatatableList users={users} />
-      </Box>
     </>
   );
 };
