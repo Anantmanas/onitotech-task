@@ -40,7 +40,6 @@ const Step2Form: React.FC<Step2FormProps> = ({ onSubmit }) => {
 
   
 useEffect(() => {
-  // Fetch country options from the API
   const fetchCountryOptions = async () => {
     try {
       const response = await fetch('https://restcountries.com/v3.1/all');
