@@ -1,10 +1,10 @@
 // Step2Form.tsx
 
-import React, { useEffect, useState } from 'react';
+import React,{useEffect, useState} from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { TextField, Button, Box, Autocomplete } from '@mui/material';
+import { TextField, Button,  Box,Autocomplete } from '@mui/material';
 
 interface FormValues {
   address?: string;
@@ -20,6 +20,7 @@ const Step2FormSchema = yup.object({
   country: yup.string(),
   pincode: yup.number().positive().integer(),
 });
+
 
 
 const resolver = yupResolver<FormValues>(Step2FormSchema);
@@ -39,22 +40,22 @@ const Step2Form: React.FC<Step2FormProps> = ({ onSubmit }) => {
 
 
 
+  
+useEffect(() => {
+  // Fetch country options from the API
+  const fetchCountryOptions = async () => {
+    try {
+      const response = await fetch('https://restcountries.com/v3.1/all');
+      const data = await response.json();
+      const countryNames = data.map((country: any) => country.name.common);
+      setCountryOptions(countryNames);
+    } catch (error) {
+      console.error('Error fetching country options:', error);
+    }
+  };
 
-  useEffect(() => {
-    // Fetch country options from the API
-    const fetchCountryOptions = async () => {
-      try {
-        const response = await fetch('https://restcountries.com/v3.1/all');
-        const data = await response.json();
-        const countryNames = data.map((country: any) => country.name.common);
-        setCountryOptions(countryNames);
-      } catch (error) {
-        console.error('Error fetching country options:', error);
-      }
-    };
-
-    fetchCountryOptions();
-  }, []);
+  fetchCountryOptions();
+}, []);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -119,21 +120,21 @@ const Step2Form: React.FC<Step2FormProps> = ({ onSubmit }) => {
           )}
         />
 
-        <Controller
-          name="country"
-          control={control}
-          render={({ field }) => (
-            <Autocomplete
-              fullWidth
-              {...field}
-              options={countryOptions}
-              renderInput={(params) => (
-                <TextField label="Country" variant="outlined"  {...params} error={!!errors.country} helperText={errors.country?.message} />
-              )}
-              style={{ marginBottom: '8px' }}
-            />
-          )}
-        />
+<Controller
+        name="country"
+        control={control}
+        render={({ field }) => (
+          <Autocomplete
+          fullWidth
+            {...field}
+            options={countryOptions}
+            renderInput={(params) => (
+              <TextField label="Country" variant="outlined"  {...params}  error={!!errors.country} helperText={errors.country?.message} />
+            )}
+            style={{ marginBottom: '8px' }}
+          />
+        )}
+      />
         <Controller
           name="pincode"
           control={control}

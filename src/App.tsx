@@ -1,38 +1,37 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addUser } from './components/Redux/userSlice';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Step1Form from './components/Step1Form';
 import Step2Form from './components/Step2Form';
 import DatatableList from './components/BasicTable';
 import { RootState } from './components/Redux/rootReducer';
 import { Box } from '@mui/material';
-import './App.css'
+import './App.css';
+
 const App: React.FC = () => {
   const dispatch = useDispatch();
   const users = useSelector((state: RootState) => state.user.users);
 
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState<any>({}); // State to hold form data
+  const [formData, setFormData] = useState<any>({});
 
   const handleStep1Submit = (data: any) => {
-    // Update form data with Step 1 data
     setFormData({ ...formData, ...data });
-    // Move to Step 2
     setStep(2);
   };
 
   const handleStep2Submit = (data: any) => {
-    // Update form data with Step 2 data
     setFormData({ ...formData, ...data, selectedCountry: data.country });
-    // Dispatch an action to save data to Redux store
     dispatch(addUser(formData));
-    // Move back to Step 1
     setStep(1);
+    toast.success('New user added!');
   };
 
   return (
     <>
-      <div >
+      <div>
         <div className=''>
           {step === 1 ? (
             <Step1Form onSubmit={handleStep1Submit} />
@@ -54,6 +53,8 @@ const App: React.FC = () => {
         >
           <DatatableList users={users} />
         </Box>
+
+        <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} />
       </div>
     </>
   );
